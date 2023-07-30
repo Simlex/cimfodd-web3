@@ -1,0 +1,228 @@
+@use "./variables.scss" as var;
+@use "./reusables.scss";
+
+.section {
+    padding: var.$bodyPaddingDesktop;
+    padding-top: 52px;
+    padding-bottom: 36px;
+    @media screen and (max-width: 520px) {
+        padding: var.$bodyPaddingMobile !important;
+    }
+}
+
+.sectionhead {
+    text-align: center;
+    font-weight: 300;
+    font-size: 40px;
+    // text-transform: uppercase;
+    margin: 0;
+    margin-bottom: 32px;
+}
+
+.heroSection {
+    border: 1px solid;
+    padding: var.$bodyPaddingDesktop;
+    padding-top: 82px;
+    padding-bottom: 82px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    transition: all 300ms ease;
+    overflow: hidden;
+    @media screen and (max-width: 520px) {
+        padding: var.$bodyPaddingMobile;
+        padding-top: 82px;
+        padding-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+        // gap: 48px;
+        // justify-content: space-between;
+        // align-items: center;
+    }
+
+    .videoBackground {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #000;
+        overflow: hidden;
+        height: 100%;
+        &__overlay {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.5) 102.71%);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        video {
+            // object-fit: cover;
+            width: 100%;
+            @media screen and (max-width: 520px) {
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+
+    &__textArea {
+        z-index: 2;
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0;
+        }
+
+        .top {
+            span {
+                padding: 6px 12px;
+                font-size: 12px;
+                color: var.$mainColor;
+                border: 1px solid;
+                border-radius: 16px;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            h1 {
+                font-size: 52px;
+                max-width: 450px;
+                margin-bottom: 20px;
+                color: #fff;
+            }
+        }
+        .bottom {
+            p {
+                max-width: 380px;
+                margin-bottom: 16px;
+                font-size: 14px;
+                font-weight: 350;
+                color: #d4d4d4;
+            }
+            &__cta {
+                // border: 1px solid;
+                button {
+                    padding: 12px 24px;
+                    background-color: var.$mainColor;
+                    color: #fff;
+                    border-radius: 24px;
+                    outline: none;
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: darken($color: var.$mainColor, $amount: 85%);
+                        background-color: var.$subColor;
+                    }
+                }
+            }
+        }
+    }
+
+    &__imageArea {
+        z-index: 2;
+        // border: 1px solid;
+        width: 400px;
+        height: 400px;
+        display: grid;
+        place-items: center;
+        @media screen and (max-width: 520px) {
+            scale: 0.6;
+        }
+        .imageContainer {
+            // border: 1px solid;
+            width: 280px;
+            height: 280px;
+            border-radius: 100%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(90deg, #b6d792 0%, #cae9a7 100%);
+            position: relative;
+
+            .image {
+                border-radius: 100%;
+                width: 250px;
+                height: 250px;
+                overflow: hidden;
+                img {
+                    scale: 1.25;
+                    transform: translate(2px, 3px);
+                }
+            }
+
+            .additional {
+                position: absolute;
+                width: 70px;
+                height: 70px;
+                display: grid;
+                place-items: center;
+                // scale: 0.4;
+                animation: rotateFood 12000ms 0s infinite linear;
+                @keyframes rotateFood {
+                    100% {
+                        rotate: 360deg;
+                    }
+                }
+
+                span {
+                    position: absolute;
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 100%;
+                    overflow: hidden;
+                    animation: rotateFoodItem 12000ms 0s infinite linear;
+                    @keyframes rotateFoodItem {
+                        100% {
+                            rotate: -360deg;
+                        }
+                    }
+
+                    &:nth-child(1) {
+                        left: -190px;
+                    }
+                    &:nth-child(2) {
+                        left: 190px;
+                    }
+                    &:nth-child(3) {
+                        left: -150px;
+                        bottom: -120px;
+                    }
+                    &:nth-child(4) {
+                        left: 150px;
+                        bottom: 120px;
+                    }
+                    &:nth-child(5) {
+                        left: -40px;
+                        bottom: -180px;
+                    }
+                    &:nth-child(6) {
+                        left: 40px;
+                        bottom: 185px;
+                    }
+                    &:nth-child(7) {
+                        left: 70px;
+                        bottom: -180px;
+                    }
+                    &:nth-child(8) {
+                        left: -70px;
+                        bottom: 180px;
+                    }
+                    &:nth-child(9) {
+                        left: 150px;
+                        bottom: -120px;
+                    }
+                    &:nth-child(10) {
+                        left: -150px;
+                        bottom: 120px;
+                    }
+                }
+            }
+        }
+    }
+}

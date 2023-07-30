@@ -1,0 +1,74 @@
+@use "./variables.scss" as var;
+@use "./reusables.scss";
+
+.container {
+  /* height: calc(100vh - 100px); */
+  background-color: darken($color: var.$mainColor, $amount: 50%);
+  color: #fff;
+  display: flex;
+  @media screen and (max-width: 520px) {
+    flex-direction: column;
+  }
+
+  .section {
+    @media screen and (max-width: 520px) {
+      padding: 24px;
+      padding-bottom: 8px;
+      order: 2;
+    }
+    h3,
+    p {
+      margin: 0;
+    }
+    h3 {
+      margin-bottom: 20px;
+      font-weight: 550;
+    }
+    p {
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 300;
+      cursor: pointer;
+      &:hover {
+        color: var.$mainColor;
+      }
+    }
+    .inputArea {
+      input {
+        background-color: darken($color: var.$mainColor, $amount: 40%);
+        outline: none;
+        border: none;
+        // border: 1px solid darken($color: #fff, $amount: 30%);
+        padding: 12px;
+        border-radius: 8px 0px 0px 8px;
+        color: #fff;
+        width: 200px;
+      }
+      button {
+        padding: 12px;
+        border-radius: 0px 8px 8px 0px;
+        color: #fff;
+        background-color: var.$mainColor;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+  }
+  .subscribeArea {
+    @media screen and (max-width: 520px) {
+      order: 1;
+      padding-top: 64px;
+    }
+  }
+}
+
+.footerMsg {
+  background-color: darken($color: var.$mainColor, $amount: 50%);
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 350;
+  padding-bottom: 24px;
+}
