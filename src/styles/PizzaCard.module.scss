@@ -1,0 +1,84 @@
+@use "./variables.scss" as var;
+@use "./reusables.scss";
+
+.productCard {
+  // border: 1px solid;
+  border-radius: 12px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  padding-top: 64px;
+  position: relative;
+  box-shadow: 0px 16px 64px rgba(0, 0, 0, 0.08);
+
+  &__image {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: -64px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 8px solid #f2f2f2;
+    &:hover {
+      img {
+        scale: 1.2;
+      }
+    }
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  p {
+    margin: 0;
+  }
+  .productTitle {
+    font-weight: 600;
+    width: fit-content;
+    margin-bottom: 4px;
+    cursor: pointer;
+    &:hover {
+      color: var.$mainColor;
+    }
+  }
+  .productDesc {
+    font-size: 12px;
+    width: 120px;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .cta {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    span {
+      font-size: 10px;
+      border-radius: 16px;
+      padding: 6px 12px;
+      border: 1px solid var.$mainColor;
+      white-space: nowrap;
+    }
+    button {
+      font-size: 10px;
+      border-radius: 16px;
+      padding: 6px 12px;
+      border: none;
+      outline: none;
+      color: #fff;
+      background-color: var.$mainColor;
+      cursor: pointer;
+      display: inline-flex;
+      white-space: nowrap;
+      &:hover {
+        background-color: darken($color: var.$mainColor, $amount: 50%);
+      }
+    }
+  }
+}

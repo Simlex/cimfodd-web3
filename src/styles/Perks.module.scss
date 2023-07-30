@@ -1,0 +1,56 @@
+@use "./variables.scss" as var;
+@use "./reusables.scss";
+
+.perksContainer {
+    background-color: #f5f6fa;
+
+    .perksList {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        // justify-content: space-between;
+        @media screen and (max-width: 520px) {
+            flex-direction: column;
+            align-items: center;
+        }
+        .perk {
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid var.$mainColor;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 32px 16px;
+            border-radius: 12px;
+            &:hover {
+                transform: translateY(-4px);
+                color: #fff;
+                background-color: darken($color: var.$mainColor, $amount: 50%);
+            }
+            h3,
+            p {
+                margin: 0;
+            }
+            span {
+                width: 40px;
+                height: 40px;
+                background-color: var.$mainColor;
+                border-radius: 100%;
+                display: grid;
+                place-items: center;
+                color: #fff;
+                margin-bottom: 16px;
+            }
+            h3 {
+                font-weight: 400;
+                margin-bottom: 8px;
+            }
+            p {
+                font-size: 12px;
+                font-weight: 300;
+                line-height: 18px;
+            }
+        }
+    }
+}

@@ -1,0 +1,85 @@
+@use "./variables.scss" as var;
+@use "./reusables.scss";
+
+
+.productsListContainer {
+  margin-top: 32px;
+  .productList {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 100px;
+    @media screen and (max-width: 520px) {
+      display: none;
+    }
+  }
+  .mobileProductListContainer {
+    display: none;
+    @media screen and (max-width: 520px) {
+      display: block;
+      width: 100%;
+      padding-top: 80px;
+      // border: 1px solid #000;
+      // overflow: hidden;
+      overflow-x: auto;
+      position: relative;
+
+      .mobileProductList {
+        display: flex;
+      }
+
+      .navigation {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: -10%;
+        z-index: 2;
+        border: 2px solid #000;
+        width: 100%;
+        span {
+          padding: 16px;
+          background-color: darken($color: var.$mainColor, $amount: 50%);
+          border-radius: 100%;
+          color: #fff;
+          display: inline-flex;
+          &:nth-child(1) {
+            position: absolute;
+            left: -60%;
+            display: none;
+            svg {
+              transform: translateX(10px);
+            }
+          }
+          &:nth-child(2) {
+            // display: none;
+            position: absolute;
+            right: -8%;
+            svg {
+              transform: translateX(-10px);
+            }
+          }
+        }
+      }
+    }
+  }
+  .moreBtn {
+    border: none;
+    outline: none;
+    padding: 12px 24px;
+    background-color: var.$mainColor;
+    border-radius: 24px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 auto;
+    margin-top: 48px;
+    cursor: pointer;
+    &:hover {
+      background-color: darken($color: var.$mainColor, $amount: 50%);
+    }
+    svg {
+      height: 10px;
+    }
+  }
+}

@@ -1,0 +1,62 @@
+@use "./variables" as var;
+
+.loader {
+  position: fixed;
+  z-index: 15;
+  width: 100%;
+  height: 100%;
+  background-color: var.$grey-bg;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  // border: 4px solid #000;
+  pointer-events: none;
+}
+.compLoader {
+  @extend .loader;
+  position: absolute;
+  background-color: transparent;
+}
+
+.imageLoader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    border: 10px solid;
+    border-color: rgba(132, 183, 78, 0.15) rgba(132, 183, 78, 0.25) rgba(132, 183, 78, 0.35) rgba(132, 183, 78, 0.5);
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+  
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  } 
+
+  
+.searchSpinner {
+    width: 34px;
+    height: 34px;
+    border: 5px dotted var.$secondary-color;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 2s linear infinite;
+    // margin: auto;
+  
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
