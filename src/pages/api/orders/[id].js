@@ -1,5 +1,5 @@
-import dbConnect from "../../../../../cimfodd/client/util/mongo";
-import Order from "../../../../../cimfodd/client/models/Order";
+import dbConnect from "../../../util/mongo";
+import Order from "../../../models/Order";
 
 const handler = async (req, res) => {
   const {
