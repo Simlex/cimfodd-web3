@@ -7,12 +7,14 @@ import useResponsive from "../../components/hooks/useResponsiveness";
 import styles from "../../styles/Product.module.scss";
 import { CakeIcon, CaretLeftIcon, CloseIcon, DrinkIcon, FastFoodIcon, HamburgerIcon, HomeIcon } from "@/components/SVGs/SVGicons";
 import { Product } from "@/models/ProductResponse";
+import SearchSpinner from "@/components/Loader/SearchSpinner";
 
 interface ProductProps {
     products: Product[] | undefined
+    isFetchingProducts: boolean
 }
 
-const Product: FunctionComponent<ProductProps> = ({ products }): ReactElement => {
+const Product: FunctionComponent<ProductProps> = ({ products, isFetchingProducts }): ReactElement => {
 
     console.log("All products: ", products);
 
@@ -145,6 +147,10 @@ const Product: FunctionComponent<ProductProps> = ({ products }): ReactElement =>
                         {products && products.length < 1 && (
                             <p>No products available</p>
                         )}
+                        {!products && isFetchingProducts &&
+                            <div className={styles.loader}>
+                                <SearchSpinner />
+                            </div>}
                     </div>
                 </div>
             </div>
@@ -155,11 +161,11 @@ const Product: FunctionComponent<ProductProps> = ({ products }): ReactElement =>
 export default Product;
 
 
-export const getServerSideProps = async () => {
-    const res = await axios.get(`${process.env.NEXTAUTH_URL}/api/products`);
-    return {
-        props: {
-            products: res.data as Product[],
-        },
-    };
-};
+// export const getServerSideProps = async () => {
+//     const res = await axios.get(`${process.env.NEXTAUTH_URL}/api/products`);
+//     return {
+//         props: {
+//             products: res.data as Product[],
+//         },
+//     };
+// };
