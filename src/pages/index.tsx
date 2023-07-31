@@ -14,9 +14,10 @@ const inter = Inter({ subsets: ['latin'] })
 
 interface HomeProps {
     products: Product[] | undefined
+    isFetchingProducts: boolean
 }
 
-const Home: FunctionComponent<HomeProps> = ({ products }): ReactElement => {
+const Home: FunctionComponent<HomeProps> = ({ products, isFetchingProducts }): ReactElement => {
     return (
         <>
             <Head>
@@ -27,7 +28,7 @@ const Home: FunctionComponent<HomeProps> = ({ products }): ReactElement => {
             </Head>
             <main className={styles.homepage}>
                 <HeroSection />
-                <PizzaList pizzaList={products} />
+                <PizzaList pizzaList={products} isFetchingProducts={isFetchingProducts} />
                 <Perks />
             </main>
         </>
