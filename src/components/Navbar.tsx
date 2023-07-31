@@ -3,22 +3,29 @@ import styles from "../styles/Navbar.module.scss";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useEffect, ReactElement, FunctionComponent } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FastFoodIcon, UserIcon } from "./SVGs/SVGicons";
 import { Cart } from "@/models/Cart";
 import images from "../../public/images";
+import useOuterClick from "./hooks/useOuterClick";
+import SearchSpinner from "./Loader/SearchSpinner";
 
 interface NavbarProps {
     cart: Cart | undefined
+    isUserWalletConnected: boolean
+    checkingUserConnectivity: boolean
+    userAccount: number | undefined
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ cart }): ReactElement => {
+const Navbar: FunctionComponent<NavbarProps> = ({ cart, isUserWalletConnected, checkingUserConnectivity, userAccount }): ReactElement => {
 
     const [accountDropdownVisibility, setAccountDropdownVisibility] = useState(false);
 
-    console.log({cart});
+    // console.log({ cart });
 
     const [admin, setAdmin] = useState(false);
+
+    const accountRef = useRef<HTMLDivElement>(null);
 
     //   function getTokenFromCookie(token) {
     //     let name = token + "=";
@@ -45,6 +52,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({ cart }): ReactElement => {
     //     }
     //   }, [token]);
 
+    useOuterClick(accountRef, setAccountDropdownVisibility);
+
     return (
         <div className={styles.container}>
             <Link href="/" passHref>
@@ -69,26 +78,29 @@ const Navbar: FunctionComponent<NavbarProps> = ({ cart }): ReactElement => {
                     <li className={styles.listItem}>Customer care</li>
                 </ul>
             </div>
-            <div className={styles.right}>
-                {!admin && (
-                    <div
-                        onClick={() =>
-                            setAccountDropdownVisibility(!accountDropdownVisibility)
-                        }
-                    >
+            <div className={styles.right} ref={accountRef}>
+                {!checkingUserConnectivity && <p>{userAccount}</p>}
+                {!checkingUserConnectivity ?
+                    <div onClick={() => setAccountDropdownVisibility(!accountDropdownVisibility)}>
                         <UserIcon fontSize={30} color="#fff" />
+                    </div> :
+                    <div className={styles.accountLoader}>
+                            <SearchSpinner />
+                    </div>}
+                {accountDropdownVisibility && !isUserWalletConnected && (
+                    <div className={styles.accountDropdown} onClick={() => setAccountDropdownVisibility(false)}>
+                        <Link href="/account/login" target="_blank" passHref>
+                            <p>Connect wallet</p>
+                        </Link>
                     </div>
                 )}
-                {accountDropdownVisibility && (
-                    <div
-                        className={styles.accountDropdown}
-                        onClick={() => setAccountDropdownVisibility(false)}
-                    >
+                {accountDropdownVisibility && isUserWalletConnected && (
+                    <div className={styles.accountDropdown} onClick={() => setAccountDropdownVisibility(false)}>
                         <Link href="/account/login" target="_blank" passHref>
-                            <p>Login</p>
+                            <p>View profile</p>
                         </Link>
-                        <Link href="/account/register" target="_blank" passHref>
-                            <p>Register</p>
+                        <Link href="/account/login" target="_blank" passHref>
+                            <p>Disconnect wallet</p>
                         </Link>
                     </div>
                 )}
