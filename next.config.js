@@ -3,7 +3,7 @@
 const nextConfig = {
     reactStrictMode: true,
     env: {
-        NEXTAUTH_URL: 'http://localhost:3001',
+        NEXTAUTH_URL: 'http://localhost:3000',
         // NEXTAUTH_URL: 'https://cimfodd.netlify.app',
         JWT_SECRET: 'SDVEWFQWEQWS',
         APP_NAME: 'Cimfodd',
