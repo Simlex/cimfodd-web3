@@ -8,9 +8,10 @@ import SearchSpinner from '../Loader/SearchSpinner';
 
 interface PizzaListProps {
     pizzaList: Product[] | undefined
+    isFetchingProducts: boolean
 }
 
-const PizzaList: FunctionComponent<PizzaListProps> = ({ pizzaList }): ReactElement => {
+const PizzaList: FunctionComponent<PizzaListProps> = ({ pizzaList, isFetchingProducts }): ReactElement => {
     const newProductsArray = pizzaList?.slice(0, 5);
 
     return (
@@ -26,10 +27,18 @@ const PizzaList: FunctionComponent<PizzaListProps> = ({ pizzaList }): ReactEleme
                     <PizzaCard key={eachProduct._id} product={eachProduct} />
                 ))} */}
                 {
-                    pizzaList ? pizzaList.slice(0, 5).map((each) => (
+                    pizzaList && pizzaList.slice(0, 5).map((each) => (
                         <PizzaCard key={each._id} product={each} />
-                    )) : <div className={styles.loader}>
+                    ))
+                }
+                {
+                    isFetchingProducts && <div className={styles.loader}>
                         <SearchSpinner />
+                    </div>
+                }
+                {
+                    !pizzaList && !isFetchingProducts && <div className={styles.errorFetchingMessage}>
+                        <p>We couldn't fetch the products. Please try again</p>
                     </div>
                 }
             </div>
