@@ -1,5 +1,6 @@
 @use "./variables.scss" as var;
 @use "./reusables.scss";
+// @use "./Loader.module.scss";
 
 .container {
   height: calc(100vh - 120px);

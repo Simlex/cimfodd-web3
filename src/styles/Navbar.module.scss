@@ -1,3 +1,5 @@
+// @use "./Loader.module.scss";
+
 .container {
   /* height: 70px; */
   padding: 10px 52px;
@@ -58,6 +60,21 @@
     // border: 1px solid #fff;
     margin-right: 16px;
     position: relative;
+
+    .accountLoader {
+        width: 32px;
+        height: 32px;
+        background-color: #fff;
+        border-radius: 100%;
+        position: relative;
+        display: grid;
+        place-items: center;
+        & > div {
+            scale: 0.5;
+            transform: translate(-1px, -1px);
+        }
+    }
+
     button {
       padding: 8px 16px;
       background: #fff;
