@@ -7,6 +7,7 @@ import images from '../../public/images';
 import { Product } from '@/models/ProductResponse';
 import { Cart } from '@/models/Cart';
 import axios from 'axios'
+import Web3 from 'web3';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     async function getAllProducts() {
         setIsFetchingProducts(true);
+        console.log('Fetching products');
 
         await axios.get(`${process.env.NEXTAUTH_URL}/api/products`)
             .then((response) => {
@@ -34,11 +36,86 @@ export default function App({ Component, pageProps }: AppProps) {
             })
             .catch((error) => {
                 console.log(error);
+                // close loader 
+                setIsFetchingProducts(false);
             })
             .finally(() => {
                 // close loader 
                 setIsFetchingProducts(false);
             })
+    }
+    ///TODO: Create spinner that loads when app comes up, the spinner loads till we check if an account exists, so we render button afterwards
+
+    const [correctNetwork, setCorrectNetwork] = useState(false);
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [currentAccount, setCurrentAccount] = useState<number>();
+    const [checkingUserConnectivity, setCheckingUserConnectivity] = useState(false);
+    const [balance, setBalance] = useState<number | null>(null);
+
+    // Calls Metamask to connect wallet on clicking Connect Wallet button
+    const connectWallet = async () => {
+
+        setCheckingUserConnectivity(true);
+
+        try {
+            // const { ethereum } = window
+            const ethereum: any = 'ethereum' in window ? window.ethereum : undefined;
+            if (!ethereum) {
+                console.log('Metamask is not detected');
+                return;
+            }
+            let chainId = await ethereum.request({ method: 'eth_chainId' })
+            console.log('connected to chain: ', chainId)
+
+            const sepoliaChainId = '0xaa36a7' // Specify chain id
+
+            if (chainId !== sepoliaChainId) {
+                alert('You are not connected to the sepolia testnet');
+                setCorrectNetwork(false);
+                return;
+            } else {
+                setCorrectNetwork(true);
+            }
+
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+
+            console.log('Found account', accounts[0])
+
+
+            // Update user connectivity status 
+            setIsUserLoggedIn(true);
+
+            // Set user account 
+            setCurrentAccount(accounts[0]);
+
+            retrieveBalance(ethereum, accounts);
+
+            setCheckingUserConnectivity(false);
+
+        } catch (error) {
+            console.log(error);
+
+            setCheckingUserConnectivity(false);
+        }
+    }
+
+    async function retrieveBalance(ethereum: any, accounts: any) {
+
+        // Create a Web3 instance with the provider
+        const web3 = new Web3(ethereum);
+
+        // Get the account balance
+        const balanceWei = await web3.eth.getBalance(accounts[0]);
+
+        // Convert the balance from Wei to Ether
+        const balanceEther = web3.utils.fromWei(balanceWei, 'ether');
+
+        console.log('Account balance:', balanceEther, 'ETH');
+
+        // Set the balance in the state or do anything else with it
+        setBalance(parseFloat(balanceEther));
+
+        setCheckingUserConnectivity(false);
     }
 
     useEffect(() => {
@@ -49,6 +126,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
     useEffect(() => {
         getAllProducts();
+    }, []);
+
+    // Run connect wallet function automically when app loads...
+    useEffect(() => {
+        connectWallet();
     }, []);
 
     // function updateCart(product: Product) {
@@ -107,13 +189,19 @@ export default function App({ Component, pageProps }: AppProps) {
     pageProps = {
         cart: cart,
         updateCart: updateCart,
-        products: products
+        products: products,
+        isFetchingProducts: isFetchingProducts,
+        isUserWalletConnected: isUserLoggedIn,
+        checkingUserConnectivity: checkingUserConnectivity,
+        balance: balance,
+        userAccount: currentAccount
     }
 
     return <>
-        {!loaderIsVisible && <Layout cart={cart}>
-            <Component {...pageProps} />
-        </Layout>}
+        {!loaderIsVisible &&
+            <Layout cart={cart} isUserWalletConnected={isUserLoggedIn} checkingUserConnectivity={checkingUserConnectivity} userAccount={currentAccount}>
+                <Component {...pageProps} />
+            </Layout>}
         {loaderIsVisible && <div className="splashScreen">
             <div className="image">
                 <Image src={images.logoBlack} alt='logo' />
