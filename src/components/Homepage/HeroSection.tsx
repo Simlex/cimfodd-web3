@@ -58,7 +58,7 @@ const HeroSection = () => {
             <div className={styles.heroSection__textArea}>
                 <div className={styles.top}>
                     <span>Hungry?</span>
-                    <h1>Your First Decentralized Food Ordering Appliation</h1>
+                    <h1>Your First Decentralized Food Ordering Application</h1>
                 </div>
                 <div className={styles.bottom}>
                     <p>
