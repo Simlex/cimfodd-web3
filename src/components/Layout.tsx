@@ -9,12 +9,20 @@ interface LayoutProps {
     isUserWalletConnected: boolean
     checkingUserConnectivity: boolean
     userAccount: number | undefined
+    connectWallet: () => Promise<void>
+    web3Button: JSX.Element 
 }
 
-const Layout: FunctionComponent<LayoutProps> = ({ children, cart, isUserWalletConnected, checkingUserConnectivity, userAccount }): ReactElement => {
+const Layout: FunctionComponent<LayoutProps> = ({ children, cart, isUserWalletConnected, checkingUserConnectivity, userAccount, connectWallet, web3Button }): ReactElement => {
     return (
         <>
-            <Navbar cart={cart} isUserWalletConnected={isUserWalletConnected} checkingUserConnectivity={checkingUserConnectivity} userAccount={userAccount} />
+            <Navbar
+                cart={cart}
+                isUserWalletConnected={isUserWalletConnected}
+                checkingUserConnectivity={checkingUserConnectivity}
+                userAccount={userAccount}
+                web3Button={web3Button}
+                connectWallet={connectWallet} />
             {children}
             <Footer />
         </>

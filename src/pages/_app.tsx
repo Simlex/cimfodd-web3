@@ -8,8 +8,15 @@ import { Product } from '@/models/ProductResponse';
 import { Cart } from '@/models/Cart';
 import axios from 'axios'
 import Web3 from 'web3';
+import useSWR from 'swr';
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Button, Web3Modal } from '@web3modal/react'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { arbitrum, mainnet, polygon } from 'wagmi/chains'
 
 export default function App({ Component, pageProps }: AppProps) {
+
+    // const onMobile = useResponsive();
 
     const [loaderIsVisible, setLoaderIsVisible] = useState(true);
     const [isFetchingProducts, setIsFetchingProducts] = useState(false);
@@ -64,6 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 console.log('Metamask is not detected');
                 return;
             }
+
             let chainId = await ethereum.request({ method: 'eth_chainId' })
             console.log('connected to chain: ', chainId)
 
@@ -79,16 +87,24 @@ export default function App({ Component, pageProps }: AppProps) {
 
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 
-            console.log('Found account', accounts[0])
+            if (accounts && accounts.length > 0) {
 
+                console.log('Found account', accounts[0])
 
+                // Update user connectivity status 
+                setIsUserLoggedIn(true);
+
+                // Set user account 
+                setCurrentAccount(accounts[0]);
+
+                retrieveBalance(ethereum, accounts);
+
+                setCheckingUserConnectivity(false);
+
+                return;
+            }
             // Update user connectivity status 
-            setIsUserLoggedIn(true);
-
-            // Set user account 
-            setCurrentAccount(accounts[0]);
-
-            retrieveBalance(ethereum, accounts);
+            setIsUserLoggedIn(false);
 
             setCheckingUserConnectivity(false);
 
@@ -118,6 +134,51 @@ export default function App({ Component, pageProps }: AppProps) {
         setCheckingUserConnectivity(false);
     }
 
+    async function checkWalletConnection() {
+        console.log('Check Wallet Connection...')
+        try {
+            const ethereum: any = 'ethereum' in window ? window.ethereum : undefined;
+
+            if (!ethereum) {
+                console.log('Metamask is not detected');
+                return;
+            }
+
+            // let chainId = await ethereum.request({ method: 'eth_chainId' })
+            // console.log('connected to chain: ', chainId)
+
+            // Check if the user is still connected to the wallet
+            const isConnected = ethereum.isConnected() || ethereum._metamask.isConnected();
+
+            if (isConnected) {
+                console.log('User is connected to the wallet');
+                return;
+            }
+
+            console.log('User is not connected to the wallet');
+
+            // Update user connectivity status 
+            setIsUserLoggedIn(false);
+
+            setCheckingUserConnectivity(false);
+
+        }
+        catch (error) {
+            console.error('Error checking wallet connection:', error);
+        }
+    }
+
+    // useEffect(() => {
+    //     // Check the wallet connection status initially
+    //     checkWalletConnection();
+
+    //     // Set an interval to check the wallet connection every 3 seconds (adjust the interval as needed)
+    //     const intervalId = setInterval(checkWalletConnection, 4000);
+
+    //     // Clean up the interval on component unmount
+    //     return () => clearInterval(intervalId);
+    // }, []);
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             setLoaderIsVisible(false);
@@ -130,7 +191,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     // Run connect wallet function automically when app loads...
     useEffect(() => {
-        connectWallet();
+        // connectWallet();
     }, []);
 
     // function updateCart(product: Product) {
@@ -186,6 +247,8 @@ export default function App({ Component, pageProps }: AppProps) {
         // console.log({ cart });
     };
 
+    const web3Button = <Web3Button balance='show' icon='hide' />;
+
     pageProps = {
         cart: cart,
         updateCart: updateCart,
@@ -194,14 +257,40 @@ export default function App({ Component, pageProps }: AppProps) {
         isUserWalletConnected: isUserLoggedIn,
         checkingUserConnectivity: checkingUserConnectivity,
         balance: balance,
-        userAccount: currentAccount
-    }
+        userAccount: currentAccount,
+        connectWallet: connectWallet,
+        web3Button: web3Button,
+    };
+
+    const chains = [arbitrum, mainnet, polygon]
+    const projectId = 'ffdee8e07df8817a4d5559d304b3fe04';
+
+    const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+    const wagmiConfig = createConfig({
+        autoConnect: true,
+        connectors: w3mConnectors({ projectId, chains }),
+        publicClient
+    })
+    const ethereumClient = new EthereumClient(wagmiConfig, chains)
 
     return <>
         {!loaderIsVisible &&
-            <Layout cart={cart} isUserWalletConnected={isUserLoggedIn} checkingUserConnectivity={checkingUserConnectivity} userAccount={currentAccount}>
-                <Component {...pageProps} />
-            </Layout>}
+            <>
+                <WagmiConfig config={wagmiConfig}>
+                    <Layout
+                        cart={cart}
+                        isUserWalletConnected={isUserLoggedIn}
+                        checkingUserConnectivity={checkingUserConnectivity}
+                        userAccount={currentAccount}
+                        web3Button={web3Button}
+                        connectWallet={connectWallet}>
+                        <Component {...pageProps} />
+                    </Layout>
+                </WagmiConfig>
+
+                <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+            </>
+        }
         {loaderIsVisible && <div className="splashScreen">
             <div className="image">
                 <Image src={images.logoBlack} alt='logo' />

@@ -15,9 +15,11 @@ interface NavbarProps {
     isUserWalletConnected: boolean
     checkingUserConnectivity: boolean
     userAccount: number | undefined
+    connectWallet: () => Promise<void>
+    web3Button: JSX.Element
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ cart, isUserWalletConnected, checkingUserConnectivity, userAccount }): ReactElement => {
+const Navbar: FunctionComponent<NavbarProps> = ({ cart, isUserWalletConnected, checkingUserConnectivity, userAccount, connectWallet, web3Button }): ReactElement => {
 
     const [accountDropdownVisibility, setAccountDropdownVisibility] = useState(false);
 
@@ -80,18 +82,17 @@ const Navbar: FunctionComponent<NavbarProps> = ({ cart, isUserWalletConnected, c
             </div>
             <div className={styles.right} ref={accountRef}>
                 {!checkingUserConnectivity && <p>{userAccount}</p>}
-                {!checkingUserConnectivity ?
+                {web3Button}
+                {/* {!checkingUserConnectivity ?
                     <div onClick={() => setAccountDropdownVisibility(!accountDropdownVisibility)}>
                         <UserIcon fontSize={30} color="#fff" />
                     </div> :
                     <div className={styles.accountLoader}>
-                            <SearchSpinner />
-                    </div>}
+                        <SearchSpinner />
+                    </div>} */}
                 {accountDropdownVisibility && !isUserWalletConnected && (
                     <div className={styles.accountDropdown} onClick={() => setAccountDropdownVisibility(false)}>
-                        <Link href="/account/login" target="_blank" passHref>
-                            <p>Connect wallet</p>
-                        </Link>
+                        <p onClick={connectWallet}>Connect wallet</p>
                     </div>
                 )}
                 {accountDropdownVisibility && isUserWalletConnected && (
