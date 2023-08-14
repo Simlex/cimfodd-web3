@@ -19,30 +19,46 @@ const HeroSection = () => {
     ];
 
     const videos = [
-        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1678963389/uploads/pexels-cristian-rojas-7613411_cuzsqc.mp4" },
-        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1678963723/uploads/pexels-taryn-elliott-7172269_zallvg.mp4" },
-        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1678963562/uploads/production_meal_uo2lty.mp4" },
+        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1692003203/cimfodd/videos/heroVideo_2_kicvm8.mp4" },
+        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1692003239/cimfodd/videos/heroVideo_1_frmlm1.mp4" },
+        { link: "https://res.cloudinary.com/dxwpajciu/video/upload/v1692003195/cimfodd/videos/heroVideo_3_suruwg.mp4" }
     ];
 
     const [currentVideo, setCurrentVideo] = useState(0);
 
     useEffect(() => {
-        setTimeout(() => {
-            if (currentVideo <= videos.length) setCurrentVideo(currentVideo + 1);
-            setCurrentVideo(0)
+        const intervalId = setInterval(() => {
+            if (currentVideo === videos.length - 1) {
+                setCurrentVideo(0);
+                return;
+            }
+            // Else... 
+            setCurrentVideo(currentVideo + 1)
         }, 5500);
+
+        return () => clearInterval(intervalId);
     }, [currentVideo]);
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         setCurrentVideo((prevIndex) =>
+    //             prevIndex === videos.length - 1 ? 0 : prevIndex + 1
+    //         );
+    //     }, 5000);
+
+    //     return () => clearInterval(intervalId);
+    // }, [videos.length]);
 
     return (
         <div className={styles.heroSection}>
             <div className={styles.videoBackground}>
                 <div className={styles.videoBackground__overlay}></div>
-                <video src={videos[0].link} autoPlay loop muted />
+                <video src={videos[currentVideo].link} autoPlay loop muted />
             </div>
             <div className={styles.heroSection__textArea}>
                 <div className={styles.top}>
                     <span>Hungry?</span>
-                    <h1>Just Come to Cimfodd & order</h1>
+                    <h1>Your First Decentralized Food Ordering Appliation</h1>
                 </div>
                 <div className={styles.bottom}>
                     <p>
